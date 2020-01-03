@@ -1,0 +1,307 @@
+<html>
+<head>
+<title>Deniz's Teaching Fractions Product</title>
+<style>
+#q-mixed-question-table *{
+  font-size:120%;
+}
+#q-mixed-operation-center, #q-mixed-equality-center {
+  padding-left: 15px;
+  padding-right: 15px;
+  min-width:1em;
+  text-align: center;
+}
+#q-mixed-fraction-right-center, #q-mixed-fraction-left-center {
+   min-width: 2em;
+}
+#q-mixed-left-center, #q-mixed-right-center {
+  min-width: 2em;
+  text-align: right;
+}
+
+#q-mixed-fraction-left-top, #q-mixed-fraction-right-top,
+#q-mixed-fraction-left-bottom, #q-mixed-fraction-right-bottom {
+   text-align: center;
+}
+</style>
+<style>
+
+#q-simplify-a1-table,
+#q-simplify-a2-table,
+#q-simplify-a3-table,
+#q-simplify-a4-table {
+   border: 2px dashed transparent;
+}
+
+#q-simplify-a1-table:hover,
+#q-simplify-a2-table:hover,
+#q-simplify-a3-table:hover,
+#q-simplify-a4-table:hover {
+   border: 2px dashed blue;
+}
+
+#q-simplify-a1-table, 
+#q-simplify-a2-table, 
+#q-simplify-a3-table, 
+#q-simplify-a4-table 
+{
+   margin-top: 2em;
+   margin-left: 2em;
+}
+
+#q-simplify-a1-table td,
+#q-simplify-a2-table td,
+#q-simplify-a3-table td,
+#q-simplify-a4-table td
+{
+   width:2em;
+   text-align:center;
+}
+
+#q-simplify-a1-table,
+#q-simplify-a2-table,
+#q-simplify-a3-table {
+  float:left;
+}
+
+#q-simplify-a4-table {
+  display:inline-block;
+}
+
+</style>
+
+<script>
+function generate() {
+	mixedFractionGenerate()
+	simplifyFractionGenerate()
+}
+
+function mixedFractionGenerate() {
+  var operation = document.getElementById('q-mixed-operation-center');
+  var operationIndex = Math.floor((Math.random() * 4));
+  var operationList = ['&plus;', '&div;', '&minus;', '&times;'];
+  
+  operation.innerHTML = operationList[operationIndex];
+  
+  var frt = document.getElementById('q-mixed-fraction-right-top');
+  frt.innerText = '' + Math.floor((Math.random() * 10)+1);
+  
+  var frb = document.getElementById('q-mixed-fraction-right-bottom');
+  frb.innerText = '' + Math.floor((Math.random() * 10)+1);
+  
+  var flt = document.getElementById('q-mixed-fraction-left-top');
+  flt.innerText = '' + Math.floor((Math.random() * 10)+1);
+  
+  var flb = document.getElementById('q-mixed-fraction-left-bottom');
+  flb.innerText = '' + Math.floor((Math.random() * 10)+1);
+  
+  var mlc = document.getElementById('q-mixed-left-center');
+  mlc.innerText = '' + Math.floor((Math.random() * 10)+1);
+  
+  var mrc = document.getElementById('q-mixed-right-center');
+  mrc.innerText = '' + Math.floor((Math.random() * 10)+1);
+  
+  var ait = document.getElementById('q-mixed-answer-input-top');
+  var aib = document.getElementById('q-mixed-answer-input-bottom');
+  ait.value= ''
+  aib.value= ''
+  document.getElementById('q-mixed-result').innerText = 'result'
+}
+
+function mixedFractionCheck() {
+  var frt = parseInt(document.getElementById('q-mixed-fraction-right-top').innerText);
+  var frb = parseInt(document.getElementById('q-mixed-fraction-right-bottom').innerText);
+  var flt = parseInt(document.getElementById('q-mixed-fraction-left-top').innerText);
+  var flb = parseInt(document.getElementById('q-mixed-fraction-left-bottom').innerText);
+  var mlc = parseInt(document.getElementById('q-mixed-left-center').innerText);
+  var mrc = parseInt(document.getElementById('q-mixed-right-center').innerText);
+  
+  var ait = parseInt(document.getElementById('q-mixed-answer-input-top').value);
+  var aib = parseInt(document.getElementById('q-mixed-answer-input-bottom').value);
+  
+  var ifl_top = mlc * flb + flt;
+  var ifl_bottom = flb;
+  
+  var ifr_top = mrc * frb + frt;
+  var ifr_bottom = frb;
+  
+  var operation = document.getElementById('q-mixed-operation-center');
+  var result_top;
+  var result_bottom;
+  switch (operation.innerHTML.charCodeAt(0)) {
+     case 43: // +
+	    result_top = ifl_top * ifr_bottom + ifr_top * ifl_bottom;
+	    result_bottom = ifl_bottom * ifr_bottom;
+	 break;
+     case 8722: // -
+	    result_top = ifl_top * ifr_bottom - ifr_top * ifl_bottom;
+	    result_bottom = ifl_bottom * ifr_bottom;
+	 break;
+     case 215: // x
+	    result_top = ifl_top * ifr_top;
+	    result_bottom = ifl_bottom * ifr_bottom;
+	 break;
+     case 247: // /
+	    result_top = ifl_top * ifr_bottom;
+	    result_bottom = ifl_bottom * ifr_top;
+	 break;
+  } // switch
+  var isWrong = false;
+  if (ait/aib != result_top/result_bottom) isWrong = true;
+
+  if (isWrong) {
+	document.getElementById('q-mixed-result').innerText = 'wrong'
+  } else {
+	document.getElementById('q-mixed-result').innerText = 'right'
+  } // if
+}
+
+function qSimplifyA(index) {
+  var isWrong = false;
+  if (document.getElementById('q-simplify-a'+index+'-fraction-top').innerText != qTop) isWrong = true;
+  if (document.getElementById('q-simplify-a'+index+'-fraction-bottom').innerText != qBottom) isWrong = true;
+  if (isWrong) {
+	document.getElementById('q-simplify-result').innerText = 'wrong'
+	document.getElementById('total-result-wrong').innerText = document.getElementById('total-result-wrong').innerText*1 + 1
+  } else {
+	document.getElementById('q-simplify-result').innerText = 'right'
+	document.getElementById('total-result-right').innerText = document.getElementById('total-result-right').innerText*1 + 1
+  } // if
+  simplifyFractionGenerate();
+}
+
+function shuffle(array) {
+  array.sort(() => Math.random() - 0.5);
+}
+
+function simplifyFractionGenerate() {
+	// random multiplier
+	var multiplier = Math.floor((Math.random() * 10)+2);
+	
+	do {
+		qTop = Math.floor((Math.random() * 10)+1);
+	} while (3 == qTop);
+	document.getElementById('q-simplify-fraction-top').innerText = (qTop * multiplier)
+	
+	do {
+	  qBottom = Math.floor((Math.random() * 10)+1);
+	  simplifiable = false;
+      for (var i = 2; i <= Math.min(qTop, qBottom); i ++) {
+        if (qTop % i == 0 && qBottom % i == 0) {
+			if (i != qTop && i != qBottom) {
+				simplifiable= true;
+			}
+		}
+      }
+	} while (qBottom == qTop || simplifiable || (qBottom != 1 && (qTop % qBottom == 0)) || (qTop != 1 && (qBottom % qTop == 0)));
+	
+	document.getElementById('q-simplify-fraction-bottom').innerText = (qBottom * multiplier)
+	
+	var aList = ['1', '2', '3', '4'];
+	shuffle(aList)
+	// Generate answers
+	document.getElementById('q-simplify-a'+aList[0]+'-fraction-top').innerText = qTop
+	document.getElementById('q-simplify-a'+aList[0]+'-fraction-bottom').innerText = qBottom
+	
+	document.getElementById('q-simplify-a'+aList[1]+'-fraction-top').innerText = qBottom
+	document.getElementById('q-simplify-a'+aList[1]+'-fraction-bottom').innerText = qTop
+	
+	document.getElementById('q-simplify-a'+aList[2]+'-fraction-top').innerText = qTop * 2
+	document.getElementById('q-simplify-a'+aList[2]+'-fraction-bottom').innerText = qBottom
+	
+	document.getElementById('q-simplify-a'+aList[3]+'-fraction-top').innerText = qTop + 3
+	document.getElementById('q-simplify-a'+aList[3]+'-fraction-bottom').innerText = qBottom
+}
+
+
+</script>
+</head>
+<body onload='generate()'>
+<h1>Welcome</h1>
+<p>Question - Mixed Fractions</p>
+<table id="q-mixed-question-table">
+<tr>
+   <td></td>
+   <td id='q-mixed-fraction-left-top'>1</td>
+   <td></td>
+   <td></td>
+   <td id='q-mixed-fraction-right-top'>3</td>
+   <td></td>
+   <td><input  id='q-mixed-answer-input-top' value="3" size="3"/></td>
+</tr>
+
+<tr>
+   <td id='q-mixed-left-center'>1</td>
+   <td id='q-mixed-fraction-left-center'><hr/></td>
+   <td id='q-mixed-operation-center'>x</td>
+   <td id='q-mixed-right-center'>2</td>
+   <td id='q-mixed-fraction-right-center'><hr/></td>
+   <td id='q-mixed-equality-center'>=</td>
+   <td><hr/></td>
+</tr>
+
+<tr>
+   <td></td>
+   <td id='q-mixed-fraction-left-bottom'>2</td>
+   <td></td>
+   <td></td>
+   <td id='q-mixed-fraction-right-bottom'>4</td>
+   <td></td>
+   <td><input id='q-mixed-answer-input-bottom' value="8" size="3"/></td>
+</tr>
+</table>
+<p>
+<button id="q-mixed-fraction-generate" onclick="mixedFractionGenerate()">generate</button>
+<button id="q-mixed-fraction-check" onclick="mixedFractionCheck()">check</button>
+<span id='q-mixed-result'>result</span>
+
+<hr/>
+<p>Question - Pick The Most Simplified Version</p>
+
+<table id="q-simplify-question-table">
+<tr><td id='q-simplify-fraction-top'>1</td></tr>
+<tr><td id='q-simplify-fraction-center'><hr/></td></tr>
+<tr><td id='q-simplify-fraction-bottom'>2</td></tr>
+</table>
+<p>
+Click on a fraction to choose your answer:
+
+<div id='q-simplify-a1'>
+<table onclick="qSimplifyA(1)" id="q-simplify-a1-table">
+<tr><td id='q-simplify-a1-fraction-top'>3</td></tr>
+<tr><td id='q-simplify-a1-fraction-center'><hr/></td></tr>
+<tr><td id='q-simplify-a1-fraction-bottom'>4</td></tr>
+</table>
+</div>
+
+<div id='q-simplify-a2'>
+<table onclick="qSimplifyA(2)" id="q-simplify-a2-table">
+<tr><td id='q-simplify-a2-fraction-top'>5</td></tr>
+<tr><td id='q-simplify-a2-fraction-center'><hr/></td></tr>
+<tr><td id='q-simplify-a2-fraction-bottom'>6</td></tr>
+</table>
+</div>
+
+<div id='q-simplify-a3'>
+<table onclick="qSimplifyA(3)" id="q-simplify-a3-table">
+<tr><td id='q-simplify-a3-fraction-top'>7</td></tr>
+<tr><td id='q-simplify-a3-fraction-center'><hr/></td></tr>
+<tr><td id='q-simplify-a3-fraction-bottom'>8</td></tr>
+</table>
+</div>
+
+<div id='q-simplify-a4'>
+<table onclick="qSimplifyA(4)" id="q-simplify-a4-table">
+<tr><td id='q-simplify-a4-fraction-top'>9</td></tr>
+<tr><td id='q-simplify-a4-fraction-center'><hr/></td></tr>
+<tr><td id='q-simplify-a4-fraction-bottom'>10</td></tr>
+</table>
+</div>
+
+<button id="q-simplify-fraction-generate" onclick="simplifyFractionGenerate()">generate</button>
+<span id='q-simplify-result'>result</span>
+<p>
+Total right:<span id='total-result-right'>0</span> wrong: <span id='total-result-wrong'>0</span>
+</body>
+</html>
+
