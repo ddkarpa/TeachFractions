@@ -1,0 +1,171 @@
+<html>
+<head>
+<title>Two-step equation solver/generator of Cagla</title>
+<style>
+.two-step-equation-table {
+border-spacing:20px;
+}
+.two-step-equation-table * {
+   font-size: 150%;
+}
+.two-step-equation-table input {
+   font-size: 100%;
+}
+.two-step-equation-table {
+border:1px solid black;
+}
+</style>
+<script>
+function getWholeRandomNumber(min, max) {
+    return Math.floor(Math.random() * (max - min) + min);
+}
+
+function generate() {
+   var symbols = ['y', 'h', 'z', 'j']
+   var symbol = symbols[getWholeRandomNumber(0, symbols.length)]
+   
+   var symbolElement = document.getElementById('answer-symbol')
+   symbolElement.innerText = symbol
+   var maxValue = 10
+   var leftTopFraction = document.getElementById('left-top-fraction')
+   leftTopFraction.innerText = getWholeRandomNumber(1, maxValue) + symbol
+   
+   var midTopFraction = document.getElementById('middle-top-fraction')
+   midTopFraction.innerText = getWholeRandomNumber(1, maxValue) 
+   
+   var rTopFraction = document.getElementById('right-top-fraction')
+   rTopFraction.innerText = getWholeRandomNumber(1, maxValue) 
+   
+   var lcFraction = document.getElementById('left-center-fraction')
+   lcFraction.innerText = getWholeRandomNumber(1, maxValue) 
+   
+   var mcFraction = document.getElementById('middle-center-fraction')
+   mcFraction.innerText = getWholeRandomNumber(1, maxValue) 
+   
+   var rcFraction = document.getElementById('right-center-fraction')
+   rcFraction.innerText = getWholeRandomNumber(1, maxValue) 
+   
+   var lbFraction = document.getElementById('left-bottom-fraction')
+   lbFraction.innerText = getWholeRandomNumber(1, maxValue) 
+   
+   var mbFraction = document.getElementById('middle-bottom-fraction')
+   mbFraction.innerText = getWholeRandomNumber(1, maxValue) 
+   
+   var rbFraction = document.getElementById('right-bottom-fraction')
+   rbFraction.innerText = getWholeRandomNumber(1, maxValue) 
+   
+   var operation = document.getElementById('operation')
+   var operations = ['-', '+', '/', 'x']
+   operation.innerText = operations[getWholeRandomNumber(0, 4)]
+   var userInput = document.getElementById('user-input')
+   userInput.value = '?'
+   
+   var answer = check();
+   while (answer % 1 || answer == 0) {
+     generate();
+     answer = check();
+   }
+   
+   var checkResult = document.getElementById('check-result')
+   checkResult.innerText = 'right or wrong'
+}
+
+function check() {
+   var a = parseInt(document.getElementById('left-center-fraction').innerText)
+   var b = parseInt(document.getElementById('left-top-fraction').innerText)
+   var c = parseInt(document.getElementById('left-bottom-fraction').innerText)
+
+   var d = parseInt(document.getElementById('middle-center-fraction').innerText)
+   var e = parseInt(document.getElementById('middle-top-fraction').innerText)
+   var f = parseInt(document.getElementById('middle-bottom-fraction').innerText)
+
+   var g = parseInt(document.getElementById('right-center-fraction').innerText)
+   var h = parseInt(document.getElementById('right-top-fraction').innerText)
+   var i = parseInt(document.getElementById('right-bottom-fraction').innerText)
+   
+   var operation = document.getElementById('operation').innerText
+   var userInput = document.getElementById('user-input')
+   var checkResult = document.getElementById('check-result')
+
+   var vadd = c*d*f+c*e
+   var yadd = f*c * (i*g+h) / i
+   var vmul = (f*d+e) / f;
+   var ymul = (i*g+h) / i;
+   var j;
+   
+   switch(operation) {
+      case '+':
+	     j = (yadd - f*a*c - vadd) / (f*b);
+	  break;
+      case '-':
+	     j = (yadd - f*a*c + vadd) / (f*b);
+	  break;
+      case '/':
+	     j = (ymul*vmul * c - a*c) / b;
+	  break;
+      case 'x':
+	     j = (ymul/vmul * c - a*c) / b;
+	  break;
+   }
+   if (userInput.value == j) {
+	  checkResult.innerText = 'right';
+   } else {
+	  checkResult.innerText = 'wrong';
+   }
+   return j;
+}
+
+</script>
+</head>
+<body onload="generate()">
+<h1>Question</h1>
+<table class="two-step-equation-table">
+<tr>
+   <td></td>
+   <td id='left-top-fraction'>#x</td>
+   <td></td>
+   <td></td>
+   <td id='middle-top-fraction'>#</td>
+   <td></td>
+   <td></td>
+   <td id='right-top-fraction'>#</td>
+   <td></td>
+   <td></td>
+   <td></td>
+   <td></td>
+</tr>
+<tr>
+   <td id='left-center-fraction'>#</td>
+   <td><hr/></td>
+   <td id='operation'>x / + -</td>
+   <td id='middle-center-fraction'>#</td>
+   <td><hr/></td>
+   <td>=</td>
+   <td id='right-center-fraction'>#</td>
+   <td><hr/></td>
+   <td></td>
+   <td id='answer-symbol'>x</td>
+   <td>=</td>
+   <td><input id='user-input' value="?" size="3"/></td>
+</tr>
+<tr>
+   <td></td>
+   <td id='left-bottom-fraction'>#</td>
+   <td></td>
+   <td></td>
+   <td id='middle-bottom-fraction'>#</td>
+   <td></td>
+   <td></td>
+   <td id='right-bottom-fraction'>#</td>
+   <td></td>
+   <td></td>
+   <td></td>
+   <td></td>
+</tr>
+</table>
+<div id='check-result'>right or wrong</div>
+<button onclick="generate()">generate</button>
+<button onclick="check()">check</button>
+</body>
+</html>
+
