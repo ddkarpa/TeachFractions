@@ -82,24 +82,24 @@ function mixedFractionGenerate() {
   var operationList = ['&plus;', '&div;', '&minus;', '&times;'];
   
   operation.innerHTML = operationList[operationIndex];
-  
+  var maxValue = Math.floor((Math.random() * 10)+3);
   var frt = document.getElementById('q-mixed-fraction-right-top');
-  frt.innerText = '' + Math.floor((Math.random() * 10)+1);
+  frt.innerText = '' + Math.floor((Math.random() * maxValue)+1);
   
   var frb = document.getElementById('q-mixed-fraction-right-bottom');
-  frb.innerText = '' + Math.floor((Math.random() * 10)+1);
+  frb.innerText = '' + Math.floor((Math.random() * maxValue)+1);
   
   var flt = document.getElementById('q-mixed-fraction-left-top');
-  flt.innerText = '' + Math.floor((Math.random() * 10)+1);
+  flt.innerText = '' + Math.floor((Math.random() * maxValue)+1);
   
   var flb = document.getElementById('q-mixed-fraction-left-bottom');
-  flb.innerText = '' + Math.floor((Math.random() * 10)+1);
+  flb.innerText = '' + Math.floor((Math.random() * maxValue)+1);
   
   var mlc = document.getElementById('q-mixed-left-center');
-  mlc.innerText = '' + Math.floor((Math.random() * 10)+1);
+  mlc.innerText = '' + Math.floor((Math.random() * maxValue)+1);
   
   var mrc = document.getElementById('q-mixed-right-center');
-  mrc.innerText = '' + Math.floor((Math.random() * 10)+1);
+  mrc.innerText = '' + Math.floor((Math.random() * maxValue)+1);
   
   var ait = document.getElementById('q-mixed-answer-input-top');
   var aib = document.getElementById('q-mixed-answer-input-bottom');
@@ -154,6 +154,17 @@ function mixedFractionCheck() {
   } else {
 	document.getElementById('q-mixed-result').innerText = 'right'
   } // if
+  
+  var context = new AudioContext()
+  var o = context.createOscillator()
+  var g = context.createGain()
+  o.connect(g)
+  g.connect(context.destination)
+  o.start(0)
+  
+  setTimeout(function() {
+	g.gain.exponentialRampToValueAtTime(0.00001, context.currentTime + 0.04)
+  }, 200)
 }
 
 function qSimplifyA(index) {
